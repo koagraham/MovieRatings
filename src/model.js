@@ -1,5 +1,6 @@
 import { Model, DataTypes } from 'sequelize';
 import util from 'util';
+import url from 'url'
 import connectToDB from './db.js';
 
 export const db = await connectToDB('postgresql:///ratings');
@@ -96,3 +97,9 @@ Rating.belongsTo(Movie, { foreignKey: 'movieId' });
 
 User.hasMany(Rating, { foreignKey: 'userId' });
 Rating.belongsTo(User, { foreignKey: 'userId' });
+
+if (process.argv[1] === url.fileURLToPath(import.meta.url)) {
+  console.log('Syncing database...');
+  await db.sync();
+  console.log('Finished syncing database!');
+}
